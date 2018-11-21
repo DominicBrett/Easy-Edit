@@ -1,0 +1,438 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+ScreenManager:
+    transition: FadeTransition()
+    MenuScreen:
+    RSScreen:
+    RAScreen:
+    RWScreen:
+    TScreen:
+    JScreen:
+    SScreen:
+    AAScreen:
+    ALScreen:
+    IVScreen:
+    SpScreen:
+<MenuScreen>:
+    name: 'Menu'
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Menu:'
+        Label:
+            text: ''
+        Button:
+            text: 'Record Screen'
+            on_release: app.root.current = 'RecordScreen'
+        Button:
+            text: 'Record Audio'
+            on_release: app.root.current = 'RecordAudio'
+        Button:
+            text: 'Record Webcam'
+            on_release: app.root.current = 'CamScreen'
+        Button:
+            text: 'Create Title'
+            on_release: app.root.current = 'TitleScreen'
+        Button:
+            text: 'Combine two videos'
+            on_release: app.root.current = 'JoinScreen'
+        Button:
+            text: 'Segment Video'
+            on_release: app.root.current = 'SegmentScreen'
+        Button:
+            text: 'Add Audio to Video'
+            on_release: app.root.current = 'AddAudioScreen'
+        Button:
+            text: 'Add Logo to Screen'
+            on_release: app.root.current = 'AddLogoScreen'
+        Button:
+            text: 'Transform Image to Video'
+            on_release: app.root.current = 'ImgTooVidScreen'
+        Button:
+            text: 'Change Speed of Video'
+            on_release: app.root.current = 'SpeedScreen'
+<RSScreen>:
+    name: 'RecordScreen'
+    duration: duration
+    cRatio: cratio
+    output: output
+    framespersecond: framespersecond
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Record Screen'
+            font_size: 30
+        Label:
+            text: ''
+        Label:
+            text: 'FPS'
+        TextInput:
+            text: '5'
+            id: framespersecond
+        Label:
+            text: 'Duration'
+        TextInput:
+            text: '10'
+            id: duration
+        Label:
+            text: 'Compression ratio'
+        TextInput:
+            text: '70'
+            id: cratio
+        Label:
+            text: 'File Name'
+        TextInput:
+            text: 'output'
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Record Screen'
+            on_release: root.recordScreen()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<RAScreen>:
+    name: 'RecordAudio'
+    audioDuration: audioDuration
+    audioFileName: audioFileName
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Record Audio'
+            font_size: 30
+        Label:
+            text: ''
+        Label:
+            text: 'Duration:'
+        TextInput:
+            text: '5'
+            id: audioDuration
+        Label:
+            text: 'File Name:'
+        TextInput:
+            text: 'output'
+            id: audioFileName
+        Label:
+            text: ''
+        Button:
+            text: 'Record Audio'
+            on_release: root.recordAudio()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<RWScreen>:
+    name: 'CamScreen'
+    webcamFPS: webcamFPS
+    webcamDuration: webcamDuration
+    webcamFileName: webcamFileName
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Record Webcam'
+        Label:
+            text: ''
+        Label:
+            text: 'FPS:'
+        TextInput:
+            text: '10'
+            id: webcamFPS
+        Label:
+            text: 'Duration:'
+        TextInput:
+            text: '10'
+            id: webcamDuration
+        Label:
+            text: 'File Name:'
+        TextInput:
+            text: 'output'
+            id: webcamFileName
+        Label:
+            text: ''
+        Button:
+            text: 'Record Webcam'
+            on_release: root.recordWebcam()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<TScreen>:
+    name: 'TitleScreen'
+    title: title
+    font: font
+    bColor: bColor
+    fontColor: fontColor
+    titleFileName: titleFileName
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Create Title'
+        Label:
+            text: ''
+        Label:
+            text: 'Title text:'
+        TextInput:
+            text: 'Hello World'
+            id: title
+        Label:
+            text: 'Font:'
+        TextInput:
+            text: 'cac_champagne'
+            id: font
+        Label:
+            text: 'Background Colour:'
+        TextInput:
+            text: '0,0,0'
+            id: bColor
+        Label:
+            text: 'Font Colour:'
+        TextInput:
+            text: '255,255,255'
+            id: fontColor
+        Label:
+            text: 'File Name:'
+        TextInput:
+            text: 'Hello World'
+            id: titleFileName
+        Label:
+            text: ''
+        Button:
+            text: 'Create Title'
+            on_release: root.createTitle()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<JScreen>:
+    name: 'JoinScreen'
+    vid1: vid1
+    vid2: vid2
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Join Videos'
+        Label:
+            text: ''
+        Label:
+            text: 'Video 1:'
+        TextInput:
+            text: 'Video1.mp4'
+            id: vid1
+        Label:
+            text: 'Video 2:'
+        TextInput
+            text: 'Video2.mp4'
+            id: vid2
+        Label:
+            text: 'Output File Name:'
+        TextInput:
+            text: ''
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Join Videos'
+            on_release: root.join()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<SScreen>:
+    name: 'SegmentScreen'
+    vid: vid
+    start: start
+    end: end
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Extract Segment from Video'
+        Label:
+            text: ''
+        Label:
+            text: 'Video:'
+        TextInput:
+            text: 'output.mp4'
+            id: vid
+        Label:
+            text: 'Start Time:'
+        TextInput:
+            text: '3'
+            id: start
+        Label:
+            text: 'End Time:'
+        TextInput:
+            text: '7'
+            id: end
+        Label:
+            text: 'Output File Name:'
+        TextInput:
+            text: ''
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Take Segment'
+            on_release: root.segment()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<AAScreen>:
+    name: 'AddAudioScreen'
+    vid: vid
+    audio: audio
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Add Audio:'
+        Label:
+            text: ''
+        Label:
+            text: 'Video:'
+        TextInput:
+            text: 'video.mp4'
+            id: vid
+        Label:
+            text: 'Audio:'
+        TextInput:
+            text: 'Audio.wav'
+            id: audio
+        Label:
+            text: 'File Name:'
+        TextInput:
+            text: 'output'
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Add Audio'
+            on_release: root.addAudio()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<ALScreen>:
+    name: 'AddLogoScreen'
+    vid: vid
+    img: img
+    placement: placement
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Add Watermark:'
+        Label:
+            text: ''
+        Label:
+            text: 'Video:'
+        TextInput:
+            text: 'video.mp4'
+            id: vid
+        Label:
+            text: 'Image:'
+        TextInput:
+            text: 'Img.jpg'
+            id: img
+        Label:
+            text: 'center, top_left, top_right, bot_left or bot_right (Default):'
+        TextInput:
+            text: 'bot_right'
+            id: placement
+        Label:
+            text: 'File Name:'
+        TextInput:
+            text: 'output'
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Add Watermark'
+            on_release: root.addLogo()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<IVScreen>:
+    name: 'ImgTooVidScreen'
+    img: img
+    duration: duration
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Image to Video:'
+        Label:
+            text: ''
+        Label:
+            text: 'Image:'
+        TextInput:
+            text: 'Img.jpg'
+            id: img
+        Label:
+            text: 'Duration'
+        TextInput:
+            text: '5'
+            id: duration
+        Label:
+            text: 'Video File Name:'
+        TextInput:
+            text: 'output'
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Create Video'
+            on_release: root.imgToVid()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
+<SpScreen>:
+    name: 'SpeedScreen'
+    vid: vid
+    speed: speed
+    output: output
+    GridLayout:
+        cols: 2
+        Label:
+            text: 'Change the speed of a video:'
+        Label:
+            text: ''
+        Label:
+            text: 'Video :'
+        TextInput:
+            text: 'Video.mp4'
+            id: vid
+        Label:
+            text: 'Speed (Double: 0.5, Half: 1.5)'
+        TextInput
+            text: '1'
+            id: speed
+        Label:
+            text: 'Output File Name:'
+        TextInput:
+            text: ''
+            id: output
+        Label:
+            text: ''
+        Button:
+            text: 'Change Speed'
+            on_release: root.changeSpeed()
+        Label:
+            text: ''
+        Button:
+            text: 'Menu'
+            on_release: app.root.current = 'Menu'
