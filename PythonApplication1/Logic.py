@@ -6,6 +6,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.uix.listview import ListItemButton
+from kivy.properties import ObjectProperty
 from PIL import ImageGrab
 import subprocess
 import time
@@ -17,27 +19,45 @@ import cv2
 import numpy as np
 import mss
 import numpy
+import os
+import glob
+import keyboard
+
+def deleteFiles(Folder, CommonName):
+    files = glob.glob(Folder + "/" + CommonName + "*")
+    for file in files:
+        os.remove(file)
 
 class RSScreen(Screen):
     def recordScreen(self):
-        duration = int(self.duration.text)
+
+        #Get Data From Kivy Front End
         framesPerSecond = int(self.framespersecond.text)
+        top = int(self.topValue.text)
+        left = int(self.leftValue.text)
+        height = int(self.heightValue.text)
+        width = int(self.widthValue.text)
+
+        Stop = False
+        ShouldStop = False
         frameCount = 0
+
         with mss.mss() as sct:
             # Part of the screen to capture
-            monitor = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
-    
-            while frameCount != duration * framesPerSecond:
-        
+            monitor = {'top': top, 'left': left, 'width': width, 'height': height}
+            
+            #monitor = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
+
+            while Stop == False:
                 # Start timer for screenshot
                 timerStart = time.time()
                 # Get raw pixels from the screen, save it to a Numpy array
                 img = numpy.array(sct.grab(monitor))
 
                 # Writes Image
-                cv2.imwrite("Frames/Frame" + str(frameCount).zfill(7) + ".png", img)
+                cv2.imwrite("Frames/Frame" + str(frameCount).zfill(7) + ".jpg", img)
                 frameCount += 1
-
+                 
                 # Finish Timer and work out the total delay to sleep for
                 timerFinish = time.time()
                 timeTaken = timerFinish - timerStart
@@ -48,12 +68,24 @@ class RSScreen(Screen):
                     framePadDuration = 0
 
                 time.sleep(framePadDuration)
+                
+                # Video Editor waits until whole second is reached in duration before stopping this can be changes
+                if keyboard.is_pressed('control') and keyboard.is_pressed('q'):
+                    ShouldStop = True
 
-        # ffmpeg command called via subprocess that creates a video file using images caputred previously, uses image2 demuxerm, pixel format is yuv420p, resoloution is 1920x1080
-        # Also getss the file name from the associated text input and inserts it into the ffmpeg statment
-        makeVidFromFrames = subprocess.call("C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -r " + str(
-        framesPerSecond) + " -f image2 -s  1920x1080 -i Frames/Frame%07d.jpg  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text+ ".mp4",
-        shell=True)
+                if ShouldStop == True and frameCount % framesPerSecond == 0:
+                    Stop = True  
+
+        try:
+            # ffmpeg command called via subprocess that creates a video file using images caputred previously, uses image2 demuxer, pixel format is yuv420p, resoloution is 1920x1080
+            # Also getss the file name from the associated text input and inserts it into the ffmpeg statment
+            makeVidFromFrames = subprocess.call("C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -r " + str(
+            framesPerSecond) + " -f image2 -s  1920x1080 -i Frames/Frame%07d.jpg -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text+ ".mp4",
+            shell=True)
+        except:
+            print("Making Video From Frames Failed")
+        finally:
+            deleteFiles("Frames","Frame")
 
 class RAScreen(Screen):
    def recordAudio(self):
@@ -236,7 +268,6 @@ class MenuScreen(Screen):
 
 class ScreenManager(ScreenManager):
     pass
-
 class VideoEditorApp(App):
     def build(self):
         pass

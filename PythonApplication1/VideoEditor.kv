@@ -52,9 +52,11 @@ ScreenManager:
             on_release: app.root.current = 'SpeedScreen'
 <RSScreen>:
     name: 'RecordScreen'
-    duration: duration
-    cRatio: cratio
     output: output
+	topValue: topValue
+	leftValue: leftValue
+	heightValue: heightValue
+	widthValue: widthValue
     framespersecond: framespersecond
     GridLayout:
         cols: 2
@@ -68,28 +70,38 @@ ScreenManager:
         TextInput:
             text: '5'
             id: framespersecond
-        Label:
-            text: 'Duration'
+		Label:
+            text: 'Top'
         TextInput:
-            text: '10'
-            id: duration
-        Label:
-            text: 'Compression ratio'
+            text: '0'
+            id: topValue
+		Label:
+            text: 'Left'
         TextInput:
-            text: '70'
-            id: cratio
+            text: '0'
+            id: leftValue
+		Label:
+            text: 'Height'
+        TextInput:
+            text: '1080'
+            id: heightValue
+		Label:
+            text: 'Width'
+        TextInput:
+            text: '1920'
+            id: widthValue
         Label:
             text: 'File Name'
         TextInput:
             text: 'output'
             id: output
         Label:
-            text: ''
+            text: 'Press Ctrl + Q to stop the recording'
         Button:
             text: 'Record Screen'
             on_release: root.recordScreen()
         Label:
-            text: ''
+            text: 'Press Ctrl + 1 to pause the recording'
         Button:
             text: 'Menu'
             on_release: app.root.current = 'Menu'
