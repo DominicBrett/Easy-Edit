@@ -12,6 +12,7 @@ ScreenManager:
     ALScreen:
     IVScreen:
     SpScreen:
+	ConfigScreen:
 <MenuScreen>:
     name: 'Menu'
     GridLayout:
@@ -50,6 +51,9 @@ ScreenManager:
         Button:
             text: 'Change Speed of Video'
             on_release: app.root.current = 'SpeedScreen'
+		Button:
+			text: 'Config ffmeg.exe executable'
+			on_release: app.root.current = 'ConfigScreen'
 <RSScreen>:
     name: 'RecordScreen'
     output: output
@@ -448,3 +452,27 @@ ScreenManager:
         Button:
             text: 'Menu'
             on_release: app.root.current = 'Menu'
+<ConfigScreen>
+	name: 'ConfigScreen'
+	ffmpegLocation: ffmpegLocation
+	GridLayout:
+		cols: 2
+		Label:
+			text: 'Config'
+		Label:
+			text: ' '
+		Label:
+			text: 'FFmpeg exeutable filepath:'
+		TextInput:
+			text: 'C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe'
+			id: ffmpegLocation
+		Label:
+			text: ' '
+		Button:
+			text: 'Change'
+			on_release: root.changeFfmpegLocation()
+		Label:
+			text: ' '
+		Button:
+			text: 'Menu'
+			on_release: app.root.current = 'Menu'

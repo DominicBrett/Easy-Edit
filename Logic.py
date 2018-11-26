@@ -22,6 +22,14 @@ import numpy
 import os
 import glob
 import keyboard
+import configparser
+
+
+def ReadConfig():
+    config = configparser.ConfigParser()
+    config.read("Config.ini")
+    print(config["FFmpeg"]["ExecutablePath"])
+    ffmpegLocation = config["FFmpeg"]["ExecutablePath"]
 
 def deleteFiles(Folder, CommonName):
     files = glob.glob(Folder + "/" + CommonName + "*")
@@ -79,9 +87,10 @@ class RSScreen(Screen):
         try:
             # ffmpeg command called via subprocess that creates a video file using images caputred previously, uses image2 demuxer, pixel format is yuv420p, resoloution is 1920x1080
             # Also getss the file name from the associated text input and inserts it into the ffmpeg statment
-            makeVidFromFrames = subprocess.call("C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -r " + str(
+            makeVidFromFrames = subprocess.call(ffmpegLocation + " -r " + str(
             framesPerSecond) + " -f image2 -s  1920x1080 -i Frames/Frame%07d.jpg -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text+ ".mp4",
             shell=True)
+            print(ffmpegLoction)
         except:
             print("Making Video From Frames Failed")
         finally:
@@ -148,7 +157,7 @@ class RWScreen(Screen):
             # Increment
             frameCount += 1
 
-        makeVidFromFrames = subprocess.call("C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -r " + str(
+        makeVidFromFrames = subprocess.call(ffmpegLocation + " -r " + str(
             framesPerSecond) + " -f image2 -s  1920x1080 -i WebcamFrames/webcamFrame%07d.png  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.webcamFileName.text + ".mp4",
                                             shell=True)
 
@@ -181,7 +190,7 @@ class JScreen(Screen):
         output = self.output.text
 
         # Runs ffmpeg statement with user input
-        joinVideos = subprocess.call('C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -i Video/' + vid1 + ' -i Video/' + vid2 + ' \
+        joinVideos = subprocess.call(ffmpegLocation + ' -i Video/' + vid1 + ' -i Video/' + vid2 + ' \
   -filter_complex "[0:0][1:0]concat=n=2:v=1:a=0 " \
     Video/'+ output + '.mp4')
 
@@ -195,7 +204,7 @@ class SScreen(Screen):
         output = self.output.text
 
         # Runs ffmpeg statement with user input
-        makeSegment = subprocess.call('C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe  -i Video/' + vid + ' -ss ' + start + ' -t ' + end + ' Video/' + output + '.mp4')
+        makeSegment = subprocess.call(ffmpegLocation + ' -i Video/' + vid + ' -ss ' + start + ' -t ' + end + ' Video/' + output + '.mp4')
 
 class AAScreen(Screen):
     def addAudio(self):
@@ -205,7 +214,7 @@ class AAScreen(Screen):
         output = self.output.text
 
         # Runs ffmpeg statement with user input
-        AddAudio = subprocess.call('C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -i '+ vid + ' -i Video/' +  + ' -codec copy -shortest Video/' + output +'.mp4')
+        AddAudio = subprocess.call(ffmpegLocation + ' -i '+ vid + ' -i Video/' +  + ' -codec copy -shortest Video/' + output +'.mp4')
 
 class ALScreen(Screen):
     def addLogo(self):
@@ -229,7 +238,7 @@ class ALScreen(Screen):
            placementString = "overlay=main_w-overlay_w-5:main_h-overlay_h-5"
 
         # Runs ffmpeg statement with user input
-       AddWatermark = subprocess.call('C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -i Video/'+ vid + ' -i ' + img + ' -filter_complex "' + placementString + '" -codec:a copy Video/' + output +'.mp4')
+       AddWatermark = subprocess.call(ffmpegLocation + ' -i Video/'+ vid + ' -i ' + img + ' -filter_complex "' + placementString + '" -codec:a copy Video/' + output +'.mp4')
 
 class IVScreen(Screen):
     def imgToVid(self):
@@ -248,7 +257,7 @@ class IVScreen(Screen):
             cv2.imwrite("ImagesTooVideo/" +
                         imgName[-1] + str(index).zfill(7) + ".png", image)
 
-        makeVidFromFrames = subprocess.call("C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -r 1 -f image2 -s  1920x1080 -i ImagesTooVideo/" + imgName[-1] + "%07d.png -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text + ".mp4",
+        makeVidFromFrames = subprocess.call(ffmpegLocation + " -r 1 -f image2 -s  1920x1080 -i ImagesTooVideo/" + imgName[-1] + "%07d.png -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text + ".mp4",
                                             shell=True)
 class SpScreen(Screen):
     def changeSpeed(self):
@@ -260,17 +269,23 @@ class SpScreen(Screen):
         speedRatio = self.speed.text
 
         # FFmpeg commang that speeds up or slows down video depending on user input
-        speedChange = subprocess.call('C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe -i Video/' + videoFileName + ' -filter:v "setpts=' + speedRatio + '*PTS" Video/' + output + '.mp4')
+        speedChange = subprocess.call(ffmpegLocation + ' -i Video/' + videoFileName + ' -filter:v "setpts=' + speedRatio + '*PTS" Video/' + output + '.mp4')
         print(time.time() - timerStart)
+
+class ConfigScreen(Screen):
+    def changeFfmpegLocation(self):
+        ffmpegLocation = self.ffmpegLocation.text
 
 class MenuScreen(Screen):
     pass
 
 class ScreenManager(ScreenManager):
     pass
+
 class VideoEditorApp(App):
     def build(self):
         pass
 
 if __name__ == "__main__":
+    ReadConfig()
     VideoEditorApp().run()

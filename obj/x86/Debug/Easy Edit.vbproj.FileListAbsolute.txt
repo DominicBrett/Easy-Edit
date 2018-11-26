@@ -1,2 +1,0 @@
-C:\Users\Dominic.Brett\source\repos\Video-Editor\obj\x86\Debug\Easy Edit.vbprojAssemblyReference.cache
-C:\Users\Dominic.Brett\source\repos\Video-Editor\obj\x86\Debug\Easy Edit.vbproj.CoreCompileInputs.cache
