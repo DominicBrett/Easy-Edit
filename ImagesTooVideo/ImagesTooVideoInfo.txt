@@ -1,0 +1,1 @@
+Frames which are used to make video from images are saved here (This feature needs a lot more work)

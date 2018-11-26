@@ -21,13 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="configTest.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Logic.py" />
-    <Compile Include="ScreenRecordTest.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.ini" />

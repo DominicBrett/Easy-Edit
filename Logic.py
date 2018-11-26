@@ -23,13 +23,14 @@ import os
 import glob
 import keyboard
 import configparser
-
+from configparser import SafeConfigParser
 
 def ReadConfig():
     config = configparser.ConfigParser()
     config.read("Config.ini")
-    print(config["FFmpeg"]["ExecutablePath"])
-    ffmpegLocation = config["FFmpeg"]["ExecutablePath"]
+    return config["FFMPEG"]["ExecutablePath"].strip()
+
+ffmpegLocation = ReadConfig()
 
 def deleteFiles(Folder, CommonName):
     files = glob.glob(Folder + "/" + CommonName + "*")
@@ -90,7 +91,6 @@ class RSScreen(Screen):
             makeVidFromFrames = subprocess.call(ffmpegLocation + " -r " + str(
             framesPerSecond) + " -f image2 -s  1920x1080 -i Frames/Frame%07d.jpg -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text+ ".mp4",
             shell=True)
-            print(ffmpegLoction)
         except:
             print("Making Video From Frames Failed")
         finally:
@@ -273,9 +273,18 @@ class SpScreen(Screen):
         print(time.time() - timerStart)
 
 class ConfigScreen(Screen):
-    def changeFfmpegLocation(self):
-        ffmpegLocation = self.ffmpegLocation.text
 
+    def on_pre_enter(self, **kwargs):
+        self.ffmpegLocation.text = ffmpegLocation
+
+    def changeFfmpegLocation(self): 
+        parser = SafeConfigParser()
+        parser.read("Config.ini")
+        parser.set("FFMPEG","ExecutablePath", self.ffmpegLocation.text)
+
+        with open("Config.ini","w") as config:
+            parser.write(config)
+        ffmpegLocation = ReadConfig()
 class MenuScreen(Screen):
     pass
 
@@ -287,5 +296,4 @@ class VideoEditorApp(App):
         pass
 
 if __name__ == "__main__":
-    ReadConfig()
     VideoEditorApp().run()
