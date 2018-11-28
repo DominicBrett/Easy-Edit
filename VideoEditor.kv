@@ -455,22 +455,81 @@ ScreenManager:
 <ConfigScreen>
 	name: 'ConfigScreen'
 	ffmpegLocation: ffmpegLocation
+	defHeight: defHeight
+	defWidth: defWidth
+	defTop: defTop
+	defLeft: defLeft
+
 	GridLayout:
-		cols: 2
+		cols: 3
+		minimum_height: '2000dp'
 		Label:
 			text: 'Config'
 		Label:
 			text: ' '
 		Label:
+			text: ' '
+
+
+		Label:
 			text: 'FFmpeg exeutable filepath:'
 		TextInput:
-			text: 'C:/ffmpeg-4.1-win64-static/bin/ffmpeg.exe'
-			id: ffmpegLocation
-		Label:
 			text: ' '
+			id: ffmpegLocation
 		Button:
 			text: 'Change'
 			on_release: root.changeFfmpegLocation()
+
+		
+		Label:
+			text: 'Screen Recording:'
+		Label:
+			text: ' '
+		Label:
+			text: ' '
+
+		Label:
+			text: 'Default Width'
+		TextInput:
+			text: ' '
+			id: defWidth
+		Button:
+			text: 'Change'
+			on_release: root.changeDefaultWidth()
+
+
+		Label:
+			text: 'Default Height'
+		TextInput:
+			text: ' '
+			id: defHeight
+		Button:
+			text: 'Change'
+			on_release: root.changeDefaultHeight()
+
+		
+		Label:
+			text: 'Default Left'
+		TextInput:
+			text: ' '
+			id: defLeft
+		Button:
+			text: 'Change'
+			on_release: root.changeDefaultWidth()
+
+
+		Label:
+			text: 'Default Top'
+		TextInput:
+			text: ' '
+			id: defTop
+		Button:
+			text: 'Change'
+			on_release: root.changeDefaultHeight()
+
+
+		Label:
+			text: ' '
 		Label:
 			text: ' '
 		Button:

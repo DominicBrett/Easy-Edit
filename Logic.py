@@ -25,12 +25,14 @@ import keyboard
 import configparser
 from configparser import SafeConfigParser
 
-def ReadConfig():
+def ReadConfig(section,attribute):
     config = configparser.ConfigParser()
     config.read("Config.ini")
-    return config["FFMPEG"]["ExecutablePath"].strip()
+    return config[section][attribute].strip()
 
-ffmpegLocation = ReadConfig()
+ffmpegLocation = ReadConfig("FFMPEG","executablepath")
+defHeight = ReadConfig("SCREENRECORDING","DefaultHeight")
+defWidth = ReadConfig("SCREENRECORDING","DefaultWidth")
 
 def deleteFiles(Folder, CommonName):
     files = glob.glob(Folder + "/" + CommonName + "*")
@@ -38,6 +40,11 @@ def deleteFiles(Folder, CommonName):
         os.remove(file)
 
 class RSScreen(Screen):
+    #Load attributes from .ini file and display in front end
+    def on_pre_enter(self, **kwargs):
+        self.heightValue.text = defHeight
+        self.widthValue.text = defWidth
+
     def recordScreen(self):
 
         #Get Data From Kivy Front End
@@ -274,8 +281,11 @@ class SpScreen(Screen):
 
 class ConfigScreen(Screen):
 
+    #Load attributes from .ini file and display in front end
     def on_pre_enter(self, **kwargs):
         self.ffmpegLocation.text = ffmpegLocation
+        self.defHeight.text = defHeight
+        self.defWidth.text = defWidth
 
     def changeFfmpegLocation(self): 
         parser = SafeConfigParser()
@@ -284,7 +294,26 @@ class ConfigScreen(Screen):
 
         with open("Config.ini","w") as config:
             parser.write(config)
-        ffmpegLocation = ReadConfig()
+        ffmpegLocation = ReadConfig("FFMPEG","executablepath")
+
+    def changeDefaultHeight(self):
+        parser = SafeConfigParser()
+        parser.read("Config.ini")
+        parser.set("SCREENRECORDING", "DefaultHeight", self.defHeight.text)
+
+        with open("Config.ini","w") as config:
+            parser.write(config)
+        defHeight = ReadConfig("SCREENRECORDING","DefaultHeight")
+
+    def changeDefaultWidth(self):
+        parser = SafeConfigParser()
+        parser.read("Config.ini")
+        parser.set("SCREENRECORDING", "DefaultWidth", self.defWidth.text)
+
+        with open("Config.ini","w") as config:
+            parser.write(config)
+        defWidth = ReadConfig("SCREENRECORDING","DefaultWidth")
+
 class MenuScreen(Screen):
     pass
 
