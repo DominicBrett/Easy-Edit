@@ -1,4 +1,5 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
 ScreenManager:
     transition: FadeTransition()
     MenuScreen:
@@ -13,48 +14,66 @@ ScreenManager:
     IVScreen:
     SpScreen:
 	ConfigScreen:
+
 <MenuScreen>:
+
     name: 'Menu'
+
     GridLayout:
-        cols: 2
+		cols: 2
+
         Label:
             text: 'Menu:'
+
         Label:
             text: ''
+
         Button:
             text: 'Record Screen'
             on_release: app.root.current = 'RecordScreen'
+
         Button:
             text: 'Record Audio'
             on_release: app.root.current = 'RecordAudio'
+
         Button:
             text: 'Record Webcam'
             on_release: app.root.current = 'CamScreen'
+
         Button:
             text: 'Create Title'
             on_release: app.root.current = 'TitleScreen'
+
         Button:
             text: 'Combine two videos'
             on_release: app.root.current = 'JoinScreen'
+
         Button:
             text: 'Segment Video'
             on_release: app.root.current = 'SegmentScreen'
+
         Button:
             text: 'Add Audio to Video'
             on_release: app.root.current = 'AddAudioScreen'
+
         Button:
             text: 'Add Logo to Screen'
             on_release: app.root.current = 'AddLogoScreen'
+
         Button:
             text: 'Transform Image to Video'
             on_release: app.root.current = 'ImgTooVidScreen'
+
         Button:
             text: 'Change Speed of Video'
             on_release: app.root.current = 'SpeedScreen'
+
 		Button:
 			text: 'Config ffmeg.exe executable'
 			on_release: app.root.current = 'ConfigScreen'
+
 <RSScreen>:
+
     name: 'RecordScreen'
     output: output
 	topValue: topValue
@@ -62,84 +81,117 @@ ScreenManager:
 	heightValue: heightValue
 	widthValue: widthValue
     framespersecond: framespersecond
+
     GridLayout:
         cols: 2
+
         Label:
             text: 'Record Screen'
             font_size: 30
+
         Label:
             text: ''
+
         Label:
             text: 'FPS'
+
         TextInput:
             text: '5'
             id: framespersecond
+
 		Label:
             text: 'Top'
+
         TextInput:
             text: '0'
             id: topValue
+
 		Label:
             text: 'Left'
+
         TextInput:
             text: '0'
             id: leftValue
+
 		Label:
             text: 'Height'
+
         TextInput:
             text: '1080'
             id: heightValue
+
 		Label:
             text: 'Width'
+
         TextInput:
             text: '1920'
             id: widthValue
+
         Label:
             text: 'File Name'
+
         TextInput:
             text: 'output'
             id: output
+
         Label:
             text: 'Press Ctrl + Q to stop the recording'
+
         Button:
             text: 'Record Screen'
             on_release: root.recordScreen()
+
         Label:
             text: 'Press Ctrl + 1 to pause the recording'
+
         Button:
             text: 'Menu'
             on_release: app.root.current = 'Menu'
+
 <RAScreen>:
+
     name: 'RecordAudio'
     audioDuration: audioDuration
     audioFileName: audioFileName
+
     GridLayout:
         cols: 2
+
         Label:
             text: 'Record Audio'
             font_size: 30
+
         Label:
             text: ''
+
         Label:
             text: 'Duration:'
+
         TextInput:
             text: '5'
             id: audioDuration
+
         Label:
             text: 'File Name:'
+
         TextInput:
             text: 'output'
             id: audioFileName
+
         Label:
             text: ''
+
         Button:
             text: 'Record Audio'
             on_release: root.recordAudio()
+
         Label:
             text: ''
+
         Button:
             text: 'Menu'
             on_release: app.root.current = 'Menu'
+
 <RWScreen>:
     name: 'CamScreen'
     webcamFPS: webcamFPS
@@ -478,7 +530,7 @@ ScreenManager:
 			id: ffmpegLocation
 		Button:
 			text: 'Change'
-			on_release: root.changeFfmpegLocation()
+			on_release: root.changeAttribute("FFMPEG","executablepath",ffmpegLocation,"ffmpegLocation")
 
 		
 		Label:
@@ -495,7 +547,7 @@ ScreenManager:
 			id: defWidth
 		Button:
 			text: 'Change'
-			on_release: root.changeDefaultWidth()
+			on_release: root.changeAttribute("SCREENRECORDING","defaultwidth",defWidth,"defWidth")
 
 
 		Label:
@@ -505,7 +557,7 @@ ScreenManager:
 			id: defHeight
 		Button:
 			text: 'Change'
-			on_release: root.changeDefaultHeight()
+			on_release: root.changeAttribute("SCREENRECORDING","defaultheight",defHeight,"defHeight")
 
 		
 		Label:
@@ -515,7 +567,7 @@ ScreenManager:
 			id: defLeft
 		Button:
 			text: 'Change'
-			on_release: root.changeDefaultWidth()
+			on_release: root.changeAttribute("SCREENRECORDING","defaultleft",defLeft,"defLeft")
 
 
 		Label:
@@ -525,7 +577,17 @@ ScreenManager:
 			id: defTop
 		Button:
 			text: 'Change'
-			on_release: root.changeDefaultHeight()
+			on_release: root.changeAttribute("SCREENRECORDING","defaulttop",defTop,"defTop")
+
+
+		Label:
+			text: 'Default FPS'
+		TextInput:
+			text: ' '
+			id: defFPS
+		Button:
+			text: 'Change'
+			on_release: root.changeAttribute("SCREENRECORDING","defaultfps",defFPS,"defFPS")
 
 
 		Label:
@@ -534,4 +596,4 @@ ScreenManager:
 			text: ' '
 		Button:
 			text: 'Menu'
-			on_release: app.root.current = 'Menu'
+			on_release: app.root.current = 'Menu'	

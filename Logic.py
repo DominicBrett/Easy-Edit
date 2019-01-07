@@ -30,9 +30,15 @@ def ReadConfig(section,attribute):
     config.read("Config.ini")
     return config[section][attribute].strip()
 
-ffmpegLocation = ReadConfig("FFMPEG","executablepath")
-defHeight = ReadConfig("SCREENRECORDING","DefaultHeight")
-defWidth = ReadConfig("SCREENRECORDING","DefaultWidth")
+# Get Defaults from Config file, Store in dict
+defaults = {
+    "ffmpegLocation" :  ReadConfig("FFMPEG","executablepath"),
+    "defHeight" : ReadConfig("SCREENRECORDING","DefaultHeight"),
+    "defWidth" : ReadConfig("SCREENRECORDING","DefaultWidth"),
+    "defLeft" : ReadConfig("SCREENRECORDING","DefaultLeft"),
+    "defTop" : ReadConfig("SCREENRECORDING","DefaultTop"),
+    "defFPS" : ReadConfig("SCREENRECORDING","deffps")
+    }
 
 def deleteFiles(Folder, CommonName):
     files = glob.glob(Folder + "/" + CommonName + "*")
@@ -42,8 +48,10 @@ def deleteFiles(Folder, CommonName):
 class RSScreen(Screen):
     #Load attributes from .ini file and display in front end
     def on_pre_enter(self, **kwargs):
-        self.heightValue.text = defHeight
-        self.widthValue.text = defWidth
+        self.heightValue.text = defaults["defHeight"]
+        self.widthValue.text = defaults["defWidth"]
+        self.leftValue.text = defaults["defLeft"]
+        self.topValue.text = defaults["defTop"]
 
     def recordScreen(self):
 
@@ -95,7 +103,7 @@ class RSScreen(Screen):
         try:
             # ffmpeg command called via subprocess that creates a video file using images caputred previously, uses image2 demuxer, pixel format is yuv420p, resoloution is 1920x1080
             # Also getss the file name from the associated text input and inserts it into the ffmpeg statment
-            makeVidFromFrames = subprocess.call(ffmpegLocation + " -r " + str(
+            makeVidFromFrames = subprocess.call(defaults["ffmpegLocation"] + " -r " + str(
             framesPerSecond) + " -f image2 -s  1920x1080 -i Frames/Frame%07d.jpg -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.output.text+ ".mp4",
             shell=True)
         except:
@@ -283,36 +291,24 @@ class ConfigScreen(Screen):
 
     #Load attributes from .ini file and display in front end
     def on_pre_enter(self, **kwargs):
-        self.ffmpegLocation.text = ffmpegLocation
-        self.defHeight.text = defHeight
-        self.defWidth.text = defWidth
+        self.ffmpegLocation.text = defaults["ffmpegLocation"]
+        self.defHeight.text = defaults["defHeight"]
+        self.defWidth.text = defaults["defWidth"]
+        self.defLeft.text = defaults["defLeft"]
+        self.defTop.text = defaults["defTop"]
+        
+        # Really have no idea why this dosen't work
+        #self.defFPS.text = defaults["defFPS"]
 
-    def changeFfmpegLocation(self): 
+     #Change an attribute in the config file, If Attribute name is always equal to AttributeVarible the latter can be removed
+    def changeAttribute(self,Section,Attribute,obj,AttributeVarible):
         parser = SafeConfigParser()
         parser.read("Config.ini")
-        parser.set("FFMPEG","ExecutablePath", self.ffmpegLocation.text)
+        parser.set(Section, Attribute, obj.text)
 
         with open("Config.ini","w") as config:
             parser.write(config)
-        ffmpegLocation = ReadConfig("FFMPEG","executablepath")
-
-    def changeDefaultHeight(self):
-        parser = SafeConfigParser()
-        parser.read("Config.ini")
-        parser.set("SCREENRECORDING", "DefaultHeight", self.defHeight.text)
-
-        with open("Config.ini","w") as config:
-            parser.write(config)
-        defHeight = ReadConfig("SCREENRECORDING","DefaultHeight")
-
-    def changeDefaultWidth(self):
-        parser = SafeConfigParser()
-        parser.read("Config.ini")
-        parser.set("SCREENRECORDING", "DefaultWidth", self.defWidth.text)
-
-        with open("Config.ini","w") as config:
-            parser.write(config)
-        defWidth = ReadConfig("SCREENRECORDING","DefaultWidth")
+        defaults[AttributeVarible] = ReadConfig(Section,Attribute)
 
 class MenuScreen(Screen):
     pass
