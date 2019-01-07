@@ -37,7 +37,7 @@ defaults = {
     "defWidth" : ReadConfig("SCREENRECORDING","DefaultWidth"),
     "defLeft" : ReadConfig("SCREENRECORDING","DefaultLeft"),
     "defTop" : ReadConfig("SCREENRECORDING","DefaultTop"),
-    "defFPS" : ReadConfig("SCREENRECORDING","deffps")
+    "defFPS" : ReadConfig("SCREENRECORDING","DefaultFps")
     }
 
 def deleteFiles(Folder, CommonName):
@@ -52,6 +52,7 @@ class RSScreen(Screen):
         self.widthValue.text = defaults["defWidth"]
         self.leftValue.text = defaults["defLeft"]
         self.topValue.text = defaults["defTop"]
+        self.framespersecond.text = defaults["defFPS"]
 
     def recordScreen(self):
 
@@ -262,7 +263,7 @@ class IVScreen(Screen):
         output = self.output.text
 
         image = cv2.imread(img,1)
-        image = cv2.resize(image, (1368, 912))
+        #image = cv2.resize(image, (1368, 912))
         imgS = img.split(".")
 
         # This is so that when looking for the ImagesTooVideo files it dosen't look for ImagesTooVideo/Titles/image.png if the orignal image is from the titles folder
@@ -296,9 +297,7 @@ class ConfigScreen(Screen):
         self.defWidth.text = defaults["defWidth"]
         self.defLeft.text = defaults["defLeft"]
         self.defTop.text = defaults["defTop"]
-        
-        # Really have no idea why this dosen't work
-        #self.defFPS.text = defaults["defFPS"]
+        self.defFPS.text = defaults["defFPS"]
 
      #Change an attribute in the config file, If Attribute name is always equal to AttributeVarible the latter can be removed
     def changeAttribute(self,Section,Attribute,obj,AttributeVarible):
