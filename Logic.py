@@ -1,3 +1,4 @@
+# Kivy Imports
 from kivy.app import App
 from kivy.base import runTouchApp
 from kivy.lang import Builder
@@ -8,10 +9,11 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
+
+# Other Imports
 from PIL import ImageGrab
 import subprocess
 import time
-# Other Imports
 import pyaudio
 import wave
 from PIL import Image, ImageFont, ImageDraw
@@ -25,6 +27,7 @@ import keyboard
 import configparser
 from configparser import SafeConfigParser
 
+# Reads config for certain attribute and returns value
 def ReadConfig(section,attribute):
     config = configparser.ConfigParser()
     config.read("Config.ini")
@@ -40,6 +43,7 @@ defaults = {
     "defFPS" : ReadConfig("SCREENRECORDING","DefaultFps")
     }
 
+# Deletes all files in a folder
 def deleteFiles(Folder, CommonName):
     files = glob.glob(Folder + "/" + CommonName + "*")
     for file in files:
@@ -71,7 +75,7 @@ class RSScreen(Screen):
             # Part of the screen to capture
             monitor = {'top': top, 'left': left, 'width': width, 'height': height}
             
-            #monitor = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
+            # monitor = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
 
             while Stop == False:
                 # Start timer for screenshot
