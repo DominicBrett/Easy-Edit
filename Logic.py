@@ -40,7 +40,8 @@ defaults = {
     "defWidth" : ReadConfig("SCREENRECORDING","DefaultWidth"),
     "defLeft" : ReadConfig("SCREENRECORDING","DefaultLeft"),
     "defTop" : ReadConfig("SCREENRECORDING","DefaultTop"),
-    "defFPS" : ReadConfig("SCREENRECORDING","DefaultFps")
+    "defFPS" : ReadConfig("SCREENRECORDING","DefaultFps"),
+    "defFPSWeb" : ReadConfig("WEBCAMRECORDING", "DefaultFps")
     }
 
 # Deletes all files in a folder
@@ -50,7 +51,7 @@ def deleteFiles(Folder, CommonName):
         os.remove(file)
 
 class RSScreen(Screen):
-    #Load attributes from .ini file and display in front end
+    #Load default attributes from .ini file and display in front end
     def on_pre_enter(self, **kwargs):
         self.heightValue.text = defaults["defHeight"]
         self.widthValue.text = defaults["defWidth"]
@@ -117,7 +118,11 @@ class RSScreen(Screen):
             deleteFiles("Frames","Frame")
 
 class RAScreen(Screen):
-   def recordAudio(self):
+    #Load default attributes from .ini file and display in front end
+    def on_pre_enter(self, **kwargs):
+        self.webcamFPSssss.text = defaults["defFPSWeb"]
+
+    def recordAudio(self):
        # Built in accordance to documentation at: https://people.csail.mit.edu/hubert/pyaudio/
        Format = pyaudio.paInt16
        Chunk = 1024
@@ -177,8 +182,13 @@ class RWScreen(Screen):
             # Increment
             frameCount += 1
 
-        makeVidFromFrames = subprocess.call(ffmpegLocation + " -r " + str(
-            framesPerSecond) + " -f image2 -s  1920x1080 -i WebcamFrames/webcamFrame%07d.png  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.webcamFileName.text + ".mp4",
+        # Get resolution of webcam using first frame to inject into ffmpeg statement
+        webframe = Image.open("WebcamFrames/webcamFrame0000000.png")
+        webframeWidth, webframeHeight = webframe.size
+
+        # Make video from frames using ffmpeg
+        makeVidFromFrames = subprocess.call(defaults["ffmpegLocation"] + " -r " + str(
+            framesPerSecond) + " -f image2 -s  " + str(webframeWidth) + "x" + str(webframeHeight) + " -i WebcamFrames/webcamFrame%07d.png  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.webcamFileName.text + ".mp4",
                                             shell=True)
 
 class TScreen(Screen):
@@ -302,6 +312,7 @@ class ConfigScreen(Screen):
         self.defLeft.text = defaults["defLeft"]
         self.defTop.text = defaults["defTop"]
         self.defFPS.text = defaults["defFPS"]
+        self.defFPSWeb.text = defaults["defFPSWeb"]
 
      #Change an attribute in the config file, If Attribute name is always equal to AttributeVarible the latter can be removed
     def changeAttribute(self,Section,Attribute,obj,AttributeVarible):

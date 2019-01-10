@@ -512,6 +512,7 @@ ScreenManager:
 	defTop: defTop
 	defLeft: defLeft
 	defFPS: defFPS
+	defFPSWeb : defFPSWeb
 
 	GridLayout:
 		cols: 3
@@ -590,6 +591,21 @@ ScreenManager:
 			text: 'Change'
 			on_release: root.changeAttribute("SCREENRECORDING","defaultfps",defFPS,"defFPS")
 
+		Label:
+			text: 'Webcam Recording:'
+		Label:
+			text: ' '
+		Label:
+			text: ' '
+		
+		Label:
+			text: 'Default FPS'
+		TextInput:
+			text: ' '
+			id: defFPSWeb
+		Button:
+			text: 'Change'
+			on_release: root.changeAttribute("WEBCAMRECORDING","defaultfps",defFPSWeb,"defFPSWeb")
 
 		Label:
 			text: ' '
