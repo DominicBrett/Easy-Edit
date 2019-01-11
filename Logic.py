@@ -182,14 +182,17 @@ class RWScreen(Screen):
             # Increment
             frameCount += 1
 
-        # Get resolution of webcam using first frame to inject into ffmpeg statement
-        webframe = Image.open("WebcamFrames/webcamFrame0000000.png")
-        webframeWidth, webframeHeight = webframe.size
+        camera.release()
 
-        # Make video from frames using ffmpeg
-        makeVidFromFrames = subprocess.call(defaults["ffmpegLocation"] + " -r " + str(
-            framesPerSecond) + " -f image2 -s  " + str(webframeWidth) + "x" + str(webframeHeight) + " -i WebcamFrames/webcamFrame%07d.png  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.webcamFileName.text + ".mp4",
-                                            shell=True)
+        try:
+            # Make video from frames using ffmpeg
+            makeVidFromFrames = subprocess.call(defaults["ffmpegLocation"] + " -r " + str(
+            framesPerSecond) + " -f image2 -s 1920x1080 -i WebcamFrames/webcamFrame%07d.png  -vcodec mpeg4 -crf 25 -pix_fmt yuv420p Video/" + self.webcamFileName.text + ".mp4",
+                       shell=True)
+        except:
+            print("Making Video From Frames Failed")
+        finally:
+            deleteFiles("WebcamFrames","webcamFrame")
 
 class TScreen(Screen):
             def createTitle(self):
